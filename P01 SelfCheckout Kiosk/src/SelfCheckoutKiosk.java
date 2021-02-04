@@ -57,11 +57,11 @@ public class SelfCheckoutKiosk {
    */
   public static void printCatalog() {
     System.out.println("+++++++++++++++++++++++++++++++++++++++++++++");
-    System.out.println("Item id \tName \t Price");
+    System.out.println("Item id \tName \t\t Price");
     System.out.println("+++++++++++++++++++++++++++++++++++++++++++++");
     for (int i = 0; i < GROCERY_ITEMS.length; i++) {
         System.out.println(i + "\t\t" + GROCERY_ITEMS[i][0] +
-        "\t\t" + GROCERY_ITEMS[i][1]);
+        "    \t " + GROCERY_ITEMS[i][1]);
     }
     System.out.println("+++++++++++++++++++++++++++++++++++++++++++++");
   }
@@ -121,7 +121,7 @@ public class SelfCheckoutKiosk {
   }
 
   /**
-   * Removes the first occurance of a given items and adjust the oversize array 
+   * Removes the first occurance of a given items and adjust the oversize array
    * @param itemToRemove the name of the item to remove
    * @param items an oversize array of items in "bag"
    * @param size a size variable corresponding with oversize array items
@@ -129,54 +129,60 @@ public class SelfCheckoutKiosk {
    */
   public static int remove(String itemToRemove, String[] items, int size) { 
     boolean itemFound = false;
+
+    if (size == 0) {
+      return 0;
+    }
     
     for (int i = 0; i < size; i++) {
 
-        if (itemFound){
-            items[i-1] = items[i];
-        }
-
-        if (items[i].equalsIgnoreCase(itemToRemove)) {
-            itemFound = true;
-        }
+      if (itemFound){
+        items[i-1] = items[i];
+      }
+      else if (items[i].equalsIgnoreCase(itemToRemove)) {
+        itemFound = true;
+      }
     }
 
     if (itemFound) {
-        return size - 1;
+      size--;
+      items[size] = null;
     }
     else{
-        System.out.println("WARNING: item not found.");
+      System.out.println("WARNING: item not found.");
     }
     return size;
   }
 
   /**
    * Method returns to number that does not count the number of duplicates in items array
+   * As an addition the items set array will be perfect array although the driver program will treat
+   * it as an oversize array which is why the method output returns a size
    * @param items array of items whose uniqeness has to be found out - oversize array
    * @param size number of elements in items array
    * @param tempItemsSet a new array of those unique items
    * @return the size of the new itemsSet
    */
   public static int getUniqueCheckedOutItems(String[] items, int size, String[] itemsSet){
-    String[] tempItemsSet = new String[100];
+    String[] tempItemsSet = new String[20];
     tempItemsSet[0] = items[0];
     int tempItemsSetSize = 1;
-    boolean stringFound = false;
 
-    for (int i = 0; i < size; i++) {
+    for (int i = 1; i < size; i++) {
+      boolean doesExist = false;
         for (int j = 0; j < tempItemsSetSize; j++) {
-            if (items[i] == tempItemsSet[j]){
-                stringFound = true;
-            }
+          if (items[i] == tempItemsSet[j]) {
+            doesExist = true;
+            break;
+          }
         }
-        if (stringFound) {
-            tempItemsSet[tempItemsSetSize] = items[i];
-            tempItemsSetSize++;
-            stringFound = false;
+        if (!doesExist) {
+          tempItemsSet[tempItemsSetSize] = items[i];
+          tempItemsSetSize++;
         }
     }
 
-    itemsSet = new String[tempItemsSetSize];
+
     for (int i = 0; i < tempItemsSetSize; i++) {
         itemsSet[i] = tempItemsSet[i];
     }
