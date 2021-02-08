@@ -5,5 +5,10 @@
         "**/.settings": true,
         "**/.factorypath": true
     },
-    "java.checkstyle.configuration": "${workspaceFolder}/cs300-style.xml"
+    "java.checkstyle.configuration": "${workspaceFolder}/cs300-style.xml",
+    "java.project.referencedLibraries": [
+      "lib/**/*.jar",
+      "P02 Matching Game/p2core.jar",
+      "P02 Matching Game/src/p2core.jar"
+    ]
 }
