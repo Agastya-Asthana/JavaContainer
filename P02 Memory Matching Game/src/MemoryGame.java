@@ -1,3 +1,19 @@
+//////////////// FILE HEADER (INCLUDE IN EVERY FILE) //////////////////////////
+//
+// Title: Memory game
+// Course: CS 300 Fall 2020
+//
+// Author: Agastya Asthana
+// Email: aasthana3@wisc.edu
+// Lecturer: Mouna Kacem
+//
+///////////////////////// ALWAYS CREDIT OUTSIDE HELP //////////////////////////
+//
+// Persons: 
+// Online Sources:
+//
+///////////////////////////////////////////////////////////////////////////////
+
 import java.io.File;
 import processing.core.PApplet;
 import processing.core.PImage;
@@ -76,13 +92,24 @@ public class MemoryGame{
     // Set the color used for this background of the Processing window
     processing.background(232, 228, 201); // dirty white
     for (int i = 0; i < cards.length; i++) cards[i].draw();
+    matchedCardsCount = 0;
+    
+    for (int i = 0; i < cards.length; i++) {
+      if (cards[i].isMatched()) {
+        matchedCardsCount++;
+      }
+    }
 
-    if (selectedCard1 != null && selectedCard2 != null) {
+    if (matchedCardsCount == 12) {
+      displayMessage(CONGRA_MSG);
+      winner = true;
+    }
+
+    if (selectedCard1 != null && selectedCard2 != null && !winner) {
       if (matchingCards(selectedCard1, selectedCard2) && numOfCardsSelected < 3){
-        displayMessage("CARDS MATCHED! Good Job!");
+        displayMessage(MATCHED);
         selectedCard1.setMatched(true);
         selectedCard2.setMatched(true);
-        matchedCardsCount++;
       }
       else if (!matchingCards(selectedCard1, selectedCard2) && numOfCardsSelected < 3){
         displayMessage(NOT_MATCHED);
@@ -136,7 +163,6 @@ public class MemoryGame{
   * Callback method called each time the user presses the mouse
   */
   public static void mousePressed(){
-
     for (int i = 0; i < cards.length; i++) {
       if (isMouseOver(cards[i]) && !cards[i].isMatched()) {
         numOfCardsSelected++;
@@ -150,6 +176,7 @@ public class MemoryGame{
           selectedCard2 = cards[i];
           if (selectedCard1 == selectedCard2) {
             selectedCard2 = null;
+            numOfCardsSelected = 1;
           }
           else{
             selectedCard2.setVisible(true);
